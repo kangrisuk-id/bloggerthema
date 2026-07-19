@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html b:version='2' class='v2' expr:dir='data:blog.languageDirection' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/data'>
+<head>
+    <meta content='width=device-width, initial-scale=1' name='viewport'/>
+    <title><data:blog.pageTitle/></title>
+    
+    <b:skin><![CDATA[
+    /* -----------------------------------------------
+    Theme Name: DevSpace Minimal (v3 - Code Particles)
+    Description: Template Komunitas & Pengembang Perangkat Lunak Non-Komersial
+    -------------------------------------------------- */
+    
+    :root {
+        --bg-color: #0f172a;
+        --text-color: #e2e8f0;
+        --accent-color: #38bdf8;
+        --card-bg: rgba(30, 41, 59, 0.75); /* Dibuat sedikit transparan agar efek partikel terlihat di belakang kartu */
+        --border-color: #334155;
+        --meta-color: #94a3b8;
+    }
+
+    body {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+        line-height: 1.6;
+        margin: 0;
+        padding: 0;
+        position: relative;
+    }
+
+    /* Lapisan Kanvas Partikel */
+    #particle-canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1; /* Berada di paling belakang */
+        pointer-events: none; /* Klik tikus tembus ke elemen di bawahnya */
+    }
+
+    a {
+        color: var(--accent-color);
+        text-decoration: none;
+        transition: color 0.2s ease;
+    }
+    a:hover {
+        color: #7dd3fc;
+    }
+
+    .container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 20px;
+        position: relative;
+        z-index: 1; /* Menaikkan konten di atas partikel */
+    }
+
+    /* Header & Navigasi */
+    header {
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: 20px;
+        margin-bottom: 40px;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        backdrop-filter: blur(4px); /* Efek kaca buram transparan */
+    }
+    @media(min-width: 600px) {
+        header {
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+        }
+    }
+    header h1 {
+        margin: 0;
+        font-size: 1.6rem;
+    }
+    header h1 a {
+        color: var(--text-color);
+    }
+    .nav-links {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+    .nav-links a {
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+
+    /* Grid Postingan Utama */
+    .post-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+    @media(min-width: 650px) {
+        .post-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+        .post-grid article:first-child {
+            grid-column: span 2;
+        }
+    }
+
+    /* Kartu Postingan */
+    .post {
+        background: var(--card-bg);
+        padding: 25px;
+        border-radius: 8px;
+        border: 1px solid var(--border-color);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+        backdrop-filter: blur(8px); /* Membuat teks di dalam kartu tetap sangat mudah dibaca */
+    }
+    .post:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 20px -5px rgba(56, 189, 248, 0.15);
+        background: rgba(30, 41, 59, 0.9);
+        border-color: var(--accent-color);
+    }
+    .post-title {
+        margin: 0 0 10px 0;
+        font-size: 1.35rem;
+        line-height: 1.4;
+    }
+    .post-title a {
+        color: var(--text-color);
+    }
+    .post-meta {
+        font-size: 0.8rem;
+        color: var(--meta-color);
+        margin-bottom: 15px;
+    }
+    .post-snippet {
+        font-size: 0.9rem;
+        color: #cbd5e1;
+        margin-bottom: 20px;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    .read-more-btn {
+        font-size: 0.85rem;
+        font-weight: 500;
+        align-self: flex-start;
+        border: 1px solid var(--accent-color);
+        padding: 6px 14px;
+        border-radius: 4px;
+        transition: all 0.2s ease;
+    }
+    .read-more-btn:hover {
+        background: var(--accent-color);
+        color: var(--bg-color) !important;
+        text-decoration: none;
+    }
+
+    /* Gaya Halaman Bacaan Tunggal */
+    .item-view .post-grid {
+        grid-template-columns: 1fr;
+    }
+    .item-view .post-grid article:first-child {
+        grid-column: span 1;
+    }
+    .item-view .post-snippet {
+        display: block;
+        overflow: visible;
+        -webkit-line-clamp: unset;
+        font-size: 1rem;
+    }
+    .item-view .read-more-btn {
+        display: none;
+    }
+
+    /* Gaya Kode */
+    pre, code {
+        font-family: "Fira Code", Consolas, Monaco, monospace;
+        background-color: #090d16;
+        border-radius: 4px;
+    }
+    code {
+        padding: 2px 6px;
+        font-size: 0.9rem;
+    }
+    pre {
+        padding: 15px;
+        overflow-x: auto;
+        border: 1px solid var(--border-color);
+    }
+    pre code {
+        padding: 0;
+        background: transparent;
+    }
+
+    /* Footer */
+    footer {
+        margin-top: 60px;
+        border-top: 1px solid var(--border-color);
+        padding-top: 20px;
+        font-size: 0.85rem;
+        color: var(--meta-color);
+        text-align: center;
+        backdrop-filter: blur(4px);
+    }
+    .contact-info {
+        margin-bottom: 10px;
+    }
+    ]]></b:skin>
+</head>
+
+<body expr:class='data:blog.pageType + "-view"'>
+    <!-- Kanvas untuk efek partikel -->
+    <canvas id='particle-canvas'></canvas>
+
+    <div class='container'>
+        <!-- Header -->
+        <header>
+            <h1><a expr:href='data:blog.homepageUrl'><data:blog.title/></a></h1>
+            <nav class='nav-links'>
+                <a expr:href='data:blog.homepageUrl'>Home</a>
+                <a href='https://kangris-id.blogspot.com/p/koleksi.html'>Koleksi</a>
+                <a href='https://kangris-id.blogspot.com/p/about-tentang-situs.html'>About</a>
+                <a href='https://kangris-id.blogspot.com/p/privacy-policy-kebijakan-privasi.html'>Privacy Policy</a>
+                <a href='https://kangris-id.blogspot.com/p/terms-of-service-ketentuan-layanan.html'>TOS</a>
+            </nav>
+        </header>
+
+        <!-- Main Content -->
+        <main>
+            <b:section id='main-content' showaddelement='yes'>
+                <b:widget id='Blog1' locked='true' title='Blog Posts' type='Blog'>
+                    <b:includable id='main'>
+                        <div class='post-grid'>
+                            <b:loop values='data:posts' var='post'>
+                                <article class='post'>
+                                    <div>
+                                        <h2 class='post-title'>
+                                            <a expr:href='data:post.url'><data:post.title/></a>
+                                        </h2>
+                                        <div class='post-meta'>
+                                            <span><data:post.dateHeader/></span>
+                                        </div>
+                                        
+                                        <div class='post-snippet'>
+                                            <b:if cond='data:blog.pageType == &quot;item&quot;'>
+                                                <data:post.body/>
+                                            <b:else/>
+                                                <b:if cond='data:blog.pageType == &quot;static_page&quot;'>
+                                                    <data:post.body/>
+                                                <b:else/>
+                                                    <data:post.snippet/>
+                                                </b:if>
+                                            </b:if>
+                                        </div>
+                                    </div>
+                                    
+                                    <b:if cond='data:blog.pageType != &quot;item&quot;'>
+                                        <b:if cond='data:blog.pageType != &quot;static_page&quot;'>
+                                            <a class='read-more-btn' expr:href='data:post.url'>Baca Selengkapnya →</a>
+                                        </b:if>
+                                    </b:if>
+                                </article>
+                            </b:loop>
+                        </div>
+                    </b:includable>
+                </b:widget>
+            </b:section>
+        </main>
+
+        <!-- Footer -->
+        <footer>
+            <div class='contact-info'>
+                <p><data:blog.metaDescription/></p>
+            </div>
+            <p>&#169; <data:blog.title/>. Dikembangkan secara independen untuk tujuan non-komersial.</p>
+        </footer>
+    </div>
+
+    <!-- Script Logika Efek Partikel Kode -->
+    <script type='text/javascript'>
+    //<![CDATA[
+    const canvas = document.getElementById('particle-canvas');
+    const ctx = canvas.getContext('2d');
+
+    // Menyesuaikan ukuran kanvas dengan layar penuh
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    // Karakter bertema kode pemrograman
+    const codeCharacters = ['0', '1', '{', '}', '[', ']', '&lt;', '&gt;', '/', ';', '+', '-', '=', '$'];
+    const particles = [];
+    const maxParticles = 60; // Batasan jumlah agar tidak membebani CPU/Baterai pembaca
+
+    class CodeParticle {
+        constructor() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.character = codeCharacters[Math.floor(Math.random() * codeCharacters.length)];
+            this.speedY = 0.3 + Math.random() * 0.7; // Kecepatan meluncur ke bawah secara halus
+            this.fontSize = 10 + Math.random() * 14;
+            this.opacity = 0.05 + Math.random() * 0.15; // Dibuat sangat transparan/samar agar tidak mencolok
+        }
+
+        update() {
+            this.y += this.speedY;
+            // Jika partikel keluar dari bawah layar, reset kembali ke atas
+            if (this.y > canvas.height) {
+                this.y = -20;
+                this.x = Math.random() * canvas.width;
+                this.opacity = 0.05 + Math.random() * 0.15;
+            }
+        }
+
+        draw() {
+            ctx.fillStyle = `rgba(56, 189, 248, ${this.opacity})`; // Menggunakan warna biru aksen tema
+            ctx.font = `${this.fontSize}px monospace`;
+            ctx.fillText(this.character, this.x, this.y);
+        }
+    }
+
+    // Inisialisasi partikel
+    for (let i = 0; i < maxParticles; i++) {
+        particles.push(new CodeParticle());
+    }
+
+    // Loop Animasi
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(particle => {
+            particle.update();
+            particle.draw();
+        });
+        requestAnimationFrame(animate);
+    }
+    animate();
+    //]]>
+    </script>
+</body>
+</html>
