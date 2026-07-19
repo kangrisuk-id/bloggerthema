@@ -4,7 +4,7 @@
 [![License](https://img.shields.io/badge/License-Non--Commercial-blue.svg)](#license)
 [![Theme-Style](https://img.shields.io/badge/Theme-Dark%20Mode-slate.svg)](#features)
 
-![Preview Tema]([https://raw.githubusercontent.com/kangrisuk-id/bloggerthema/main/img/DevSpace Minimal.png](https://github.com/kangrisuk-id/bloggerthema/blob/main/img/DevSpace%20Minimal.png))
+![Preview Tema](https://raw.githubusercontent.com/kangrisuk-id/bloggerthema/main/img/DevSpace%20Minimal.png)
 
 **DevSpace Minimal** adalah template Blogger premium bertema gelap (*dark mode*) yang dirancang khusus untuk para pengembang perangkat lunak (*software engineers*), blogger teknis, dan antusias *open-source*. Template ini menggabungkan kesederhanaan, kecepatan, dan estetika futuristik tanpa mengorbankan keterbacaan kode pemrograman.
 
