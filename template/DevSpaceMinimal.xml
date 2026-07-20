@@ -7,17 +7,22 @@
     
     <b:skin><![CDATA[
     /* -----------------------------------------------
-    Theme Name: DevSpace Minimal (v3 - Code Particles)
-    Description: Template Komunitas & Pengembang Perangkat Lunak Non-Komersial
+    Theme Name: DevSpace Minimal (v6 - Responsive Code Block Fix)
+    Description: Template Blog Komunitas Pengembang Perangkat Lunak Non-Komersial
     -------------------------------------------------- */
     
     :root {
         --bg-color: #0f172a;
         --text-color: #e2e8f0;
         --accent-color: #38bdf8;
-        --card-bg: rgba(30, 41, 59, 0.75); /* Dibuat sedikit transparan agar efek partikel terlihat di belakang kartu */
+        --card-bg: rgba(30, 41, 59, 0.75);
         --border-color: #334155;
         --meta-color: #94a3b8;
+    }
+
+    /* Reset & Pengaman Dasar Layout */
+    * {
+        box-sizing: border-box;
     }
 
     body {
@@ -28,6 +33,7 @@
         margin: 0;
         padding: 0;
         position: relative;
+        overflow-x: hidden;
     }
 
     /* Lapisan Kanvas Partikel */
@@ -37,8 +43,8 @@
         left: 0;
         width: 100%;
         height: 100%;
-        z-index: -1; /* Berada di paling belakang */
-        pointer-events: none; /* Klik tikus tembus ke elemen di bawahnya */
+        z-index: -1;
+        pointer-events: none;
     }
 
     a {
@@ -51,11 +57,12 @@
     }
 
     .container {
+        width: 100%;
         max-width: 900px;
         margin: 0 auto;
         padding: 20px;
         position: relative;
-        z-index: 1; /* Menaikkan konten di atas partikel */
+        z-index: 1;
     }
 
     /* Header & Navigasi */
@@ -66,7 +73,7 @@
         display: flex;
         flex-direction: column;
         gap: 15px;
-        backdrop-filter: blur(4px); /* Efek kaca buram transparan */
+        backdrop-filter: blur(4px);
     }
     @media(min-width: 600px) {
         header {
@@ -97,17 +104,21 @@
         display: grid;
         grid-template-columns: 1fr;
         gap: 25px;
+        width: 100%;
     }
-    @media(min-width: 650px) {
-        .post-grid {
+    
+    .index-view .post-grid, .archive-view .post-grid {
+        @media(min-width: 650px) {
             grid-template-columns: 1fr 1fr;
         }
-        .post-grid article:first-child {
+    }
+    .index-view .post-grid article:first-child {
+        @media(min-width: 650px) {
             grid-column: span 2;
         }
     }
 
-    /* Kartu Postingan */
+    /* Kartu Postingan (Sudah Dikunci Mencegah Layar Melebar) */
     .post {
         background: var(--card-bg);
         padding: 25px;
@@ -117,7 +128,11 @@
         flex-direction: column;
         justify-content: space-between;
         transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
-        backdrop-filter: blur(8px); /* Membuat teks di dalam kartu tetap sangat mudah dibaca */
+        backdrop-filter: blur(8px);
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;       /* KUNCI: Mencegah flex child mendorong lebar kontainer */
+        overflow: hidden;   /* Mencegah konten meluber keluar kartu */
     }
     .post:hover {
         transform: translateY(-4px);
@@ -127,8 +142,9 @@
     }
     .post-title {
         margin: 0 0 10px 0;
-        font-size: 1.35rem;
+        font-size: 1.5rem;
         line-height: 1.4;
+        word-break: break-word;
     }
     .post-title a {
         color: var(--text-color);
@@ -138,15 +154,34 @@
         color: var(--meta-color);
         margin-bottom: 15px;
     }
-    .post-snippet {
-        font-size: 0.9rem;
-        color: #cbd5e1;
-        margin-bottom: 20px;
+    
+    /* Wadah Isi Artikel */
+    .post-body {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;       /* KUNCI: Mengunci lebar ruang artikel */
+        overflow-wrap: break-word;
+    }
+    
+    /* Pengaturan teks di Halaman Utama (Ringkasan) */
+    .index-view .post-body, .archive-view .post-body {
         display: -webkit-box;
         -webkit-line-clamp: 3;
         -webkit-box-orient: vertical;
         overflow: hidden;
+        font-size: 0.9rem;
+        color: #cbd5e1;
+        margin-bottom: 20px;
     }
+    
+    /* Pengaturan teks penuh saat artikel dibuka */
+    .item-view .post-body, .static_page-view .post-body {
+        display: block;
+        overflow: visible;
+        font-size: 1rem;
+        color: var(--text-color);
+    }
+    
     .read-more-btn {
         font-size: 0.85rem;
         font-weight: 500;
@@ -155,6 +190,7 @@
         padding: 6px 14px;
         border-radius: 4px;
         transition: all 0.2s ease;
+        margin-top: 10px;
     }
     .read-more-btn:hover {
         background: var(--accent-color);
@@ -162,24 +198,11 @@
         text-decoration: none;
     }
 
-    /* Gaya Halaman Bacaan Tunggal */
-    .item-view .post-grid {
-        grid-template-columns: 1fr;
+    /* Gaya Kode Khusus Mobile & Desktop (Diperbaiki) */
+    .post-body p {
+        margin: 0 0 1.2em 0;
+        word-wrap: break-word;
     }
-    .item-view .post-grid article:first-child {
-        grid-column: span 1;
-    }
-    .item-view .post-snippet {
-        display: block;
-        overflow: visible;
-        -webkit-line-clamp: unset;
-        font-size: 1rem;
-    }
-    .item-view .read-more-btn {
-        display: none;
-    }
-
-    /* Gaya Kode */
     pre, code {
         font-family: "Fira Code", Consolas, Monaco, monospace;
         background-color: #090d16;
@@ -188,15 +211,33 @@
     code {
         padding: 2px 6px;
         font-size: 0.9rem;
+        color: #f43f5e;
+        word-break: break-word;
     }
     pre {
         padding: 15px;
-        overflow-x: auto;
         border: 1px solid var(--border-color);
+        margin: 20px 0;
+        display: block;
+        width: 100%;
+        max-width: 100%;
+        overflow-x: auto;       /* Scrollbar horizontal HANYA di dalam box hitam */
+        white-space: pre;
+        box-sizing: border-box;
     }
     pre code {
         padding: 0;
         background: transparent;
+        color: #e2e8f0;
+        white-space: pre;
+        display: block;
+    }
+
+    /* Gambar Responsif */
+    .post-body img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 6px;
     }
 
     /* Footer */
@@ -216,7 +257,7 @@
 </head>
 
 <body expr:class='data:blog.pageType + "-view"'>
-    <!-- Kanvas untuk efek partikel -->
+    <!-- Kanvas efek partikel kode melayang -->
     <canvas id='particle-canvas'></canvas>
 
     <div class='container'>
@@ -232,7 +273,7 @@
             </nav>
         </header>
 
-        <!-- Main Content -->
+        <!-- Main Content Area -->
         <main>
             <b:section id='main-content' showaddelement='yes'>
                 <b:widget id='Blog1' locked='true' title='Blog Posts' type='Blog'>
@@ -242,13 +283,17 @@
                                 <article class='post'>
                                     <div>
                                         <h2 class='post-title'>
-                                            <a expr:href='data:post.url'><data:post.title/></a>
+                                            <b:if cond='data:blog.pageType == &quot;item&quot;'>
+                                                <data:post.title/>
+                                            <b:else/>
+                                                <a expr:href='data:post.url'><data:post.title/></a>
+                                            </b:if>
                                         </h2>
                                         <div class='post-meta'>
                                             <span><data:post.dateHeader/></span>
                                         </div>
                                         
-                                        <div class='post-snippet'>
+                                        <div class='post-body'>
                                             <b:if cond='data:blog.pageType == &quot;item&quot;'>
                                                 <data:post.body/>
                                             <b:else/>
@@ -283,13 +328,12 @@
         </footer>
     </div>
 
-    <!-- Script Logika Efek Partikel Kode -->
+    <!-- Script Partikel Kode (HTML5 Canvas) -->
     <script type='text/javascript'>
     //<![CDATA[
     const canvas = document.getElementById('particle-canvas');
     const ctx = canvas.getContext('2d');
 
-    // Menyesuaikan ukuran kanvas dengan layar penuh
     function resizeCanvas() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
@@ -297,24 +341,22 @@
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
 
-    // Karakter bertema kode pemrograman
-    const codeCharacters = ['0', '1', '{', '}', '[', ']', '&lt;', '&gt;', '/', ';', '+', '-', '=', '$'];
+    const codeCharacters = ['0', '1', '{', '}', '[', ']', '<', '>', '/', ';', '+', '-', '=', '$'];
     const particles = [];
-    const maxParticles = 60; // Batasan jumlah agar tidak membebani CPU/Baterai pembaca
+    const maxParticles = 60;
 
     class CodeParticle {
         constructor() {
             this.x = Math.random() * canvas.width;
             this.y = Math.random() * canvas.height;
             this.character = codeCharacters[Math.floor(Math.random() * codeCharacters.length)];
-            this.speedY = 0.3 + Math.random() * 0.7; // Kecepatan meluncur ke bawah secara halus
+            this.speedY = 0.3 + Math.random() * 0.7;
             this.fontSize = 10 + Math.random() * 14;
-            this.opacity = 0.05 + Math.random() * 0.15; // Dibuat sangat transparan/samar agar tidak mencolok
+            this.opacity = 0.05 + Math.random() * 0.15;
         }
 
         update() {
             this.y += this.speedY;
-            // Jika partikel keluar dari bawah layar, reset kembali ke atas
             if (this.y > canvas.height) {
                 this.y = -20;
                 this.x = Math.random() * canvas.width;
@@ -323,18 +365,16 @@
         }
 
         draw() {
-            ctx.fillStyle = `rgba(56, 189, 248, ${this.opacity})`; // Menggunakan warna biru aksen tema
+            ctx.fillStyle = `rgba(56, 189, 248, ${this.opacity})`;
             ctx.font = `${this.fontSize}px monospace`;
             ctx.fillText(this.character, this.x, this.y);
         }
     }
 
-    // Inisialisasi partikel
     for (let i = 0; i < maxParticles; i++) {
         particles.push(new CodeParticle());
     }
 
-    // Loop Animasi
     function animate() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         particles.forEach(particle => {
